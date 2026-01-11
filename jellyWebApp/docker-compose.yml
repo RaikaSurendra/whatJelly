@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  jelly-webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jelly-webapp
+    ports:
+      - "8080:8080"
+    environment:
+      - JAVA_OPTS=-Xmx512m -Xms256m
+      - SERVER_PORT=8080
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    # volumes:
+      # Mount pages directory for live editing (optional - for development)
+      # Uncomment to enable hot-reload of Jelly pages
+      # - ./src/main/webapp/pages:/app/webapp/pages
+      
+      # Mount for logs (optional)
+      # - ./logs:/app/logs
+    networks:
+      - jelly-network
+    labels:
+      - "com.example.description=Jelly Web Application Tutorial"
+      - "com.example.version=1.0"
+
+networks:
+  jelly-network:
+    driver: bridge
+
+# Optional: Add a reverse proxy for production
+# services:
+#   nginx:
+#     image: nginx:alpine
+#     container_name: jelly-nginx
+#     ports:
+#       - "80:80"
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#     depends_on:
+#       - jelly-webapp
+#     networks:
+#       - jelly-network

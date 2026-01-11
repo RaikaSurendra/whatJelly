@@ -1,0 +1,273 @@
+<?xml version="1.0"?>
+<j:jelly xmlns:j="jelly:core" xmlns:app="app">
+<html>
+<head>
+    <title>Admin - Jelly Web App</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+        .header { background: #e74c3c; color: white; padding: 20px; text-align: center; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
+        .menu { background: #c0392b; padding: 15px; text-align: center; }
+        .menu a { color: white; text-decoration: none; padding: 10px 20px; margin: 0 10px; display: inline-block; }
+        .menu a:hover { background: #e74c3c; border-radius: 4px; }
+        .admin-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 20px 0; }
+        .admin-card h3 { margin: 0 0 15px 0; color: #2c3e50; border-bottom: 2px solid #e74c3c; padding-bottom: 10px; }
+        .button { display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 4px; margin: 5px; cursor: pointer; border: none; }
+        .button-danger { background: #e74c3c; }
+        .button-success { background: #27ae60; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #34495e; color: white; padding: 12px; text-align: left; }
+        td { padding: 10px 12px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f8f9fa; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
+        .info { background: #d1ecf1; border-left: 4px solid #0c5460; padding: 15px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🔧 Admin Panel</h1>
+        <p>Database Management &amp; Configuration</p>
+    </div>
+
+    <div class="menu">
+        <a href="/">Home</a>
+        <a href="/users.jelly">Users</a>
+        <a href="/products.jelly">Products</a>
+        <a href="/dashboard.jelly">Dashboard</a>
+        <a href="/admin.jelly">Admin</a>
+    </div>
+
+    <div class="container">
+        <div class="warning">
+            <strong>⚠️ Warning:</strong> This is an admin panel with database access. In production, this should be protected with authentication and authorization.
+        </div>
+
+        <!-- Database Statistics -->
+        <div class="admin-card">
+            <h3>📊 Database Statistics</h3>
+            
+            <app:sqlQuery var="tables">
+                SELECT TABLE_NAME, 
+                       (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = T.TABLE_NAME) as column_count
+                FROM INFORMATION_SCHEMA.TABLES T
+                WHERE TABLE_SCHEMA = 'PUBLIC'
+                ORDER BY TABLE_NAME
+            </app:sqlQuery>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table Name</th>
+                        <th>Columns</th>
+                        <th>Row Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <j:forEach var="table" items="${tables}">
+                        <app:sqlQuery var="rowCount">
+                            SELECT COUNT(*) as count FROM ${table.table_name}
+                        </app:sqlQuery>
+                        <tr>
+                            <td><strong>${table.table_name}</strong></td>
+                            <td>${table.column_count}</td>
+                            <td>${rowCount[0].count} rows</td>
+                        </tr>
+                    </j:forEach>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- User Management -->
+        <div class="admin-card">
+            <h3>👥 User Management</h3>
+            
+            <app:sqlQuery var="users">
+                SELECT id, name, email, role, active, created_at 
+                FROM users 
+                ORDER BY created_at DESC
+            </app:sqlQuery>
+
+            <p>Total users: <strong>${users_count}</strong></p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <j:forEach var="user" items="${users}">
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.role}</td>
+                            <td>
+                                <j:choose>
+                                    <j:when test="${user.active}">
+                                        <span style="color: #27ae60;">● Active</span>
+                                    </j:when>
+                                    <j:otherwise>
+                                        <span style="color: #95a5a6;">● Inactive</span>
+                                    </j:otherwise>
+                                </j:choose>
+                            </td>
+                            <td>
+                                <button class="button" onclick="alert('Edit user ${user.id}')">Edit</button>
+                                <button class="button button-danger" onclick="confirm('Delete user?')">Delete</button>
+                            </td>
+                        </tr>
+                    </j:forEach>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Product Management -->
+        <div class="admin-card">
+            <h3>🛍️ Product Management</h3>
+            
+            <app:sqlQuery var="products">
+                SELECT p.id, p.name, p.price, p.stock, p.active, c.name as category_name 
+                FROM products p 
+                LEFT JOIN categories c ON p.category_id = c.id 
+                ORDER BY p.created_at DESC 
+                LIMIT 10
+            </app:sqlQuery>
+
+            <p>Showing latest 10 products (Total: <app:sqlQuery var="totalProds">SELECT COUNT(*) as count FROM products</app:sqlQuery>${totalProds[0].count})</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <j:forEach var="product" items="${products}">
+                        <tr>
+                            <td>${product.id}</td>
+                            <td>${product.name}</td>
+                            <td>${product.category_name}</td>
+                            <td>$<app:formatNumber value="${product.price}" pattern="#,##0.00"/></td>
+                            <td>
+                                <j:choose>
+                                    <j:when test="${product.stock lt 10}">
+                                        <span style="color: #e74c3c;">${product.stock}</span>
+                                    </j:when>
+                                    <j:otherwise>
+                                        ${product.stock}
+                                    </j:otherwise>
+                                </j:choose>
+                            </td>
+                            <td>
+                                <j:choose>
+                                    <j:when test="${product.active}">
+                                        <span style="color: #27ae60;">● Active</span>
+                                    </j:when>
+                                    <j:otherwise>
+                                        <span style="color: #95a5a6;">● Inactive</span>
+                                    </j:otherwise>
+                                </j:choose>
+                            </td>
+                            <td>
+                                <button class="button" onclick="alert('Edit product ${product.id}')">Edit</button>
+                                <button class="button button-danger" onclick="confirm('Delete product?')">Delete</button>
+                            </td>
+                        </tr>
+                    </j:forEach>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Database Query Tool -->
+        <div class="admin-card">
+            <h3>🔍 Custom Query Tool</h3>
+            <div class="info">
+                <strong>ℹ️ Info:</strong> This demonstrates the power of custom SQL tags. In production, this would be dangerous!
+            </div>
+            
+            <p>Example: Get all orders with user names</p>
+            <app:sqlQuery var="orderDetails">
+                SELECT o.id, u.name as customer, o.total, o.status, o.created_at 
+                FROM orders o 
+                JOIN users u ON o.user_id = u.id 
+                ORDER BY o.created_at DESC
+            </app:sqlQuery>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <j:forEach var="order" items="${orderDetails}">
+                        <tr>
+                            <td>#${order.id}</td>
+                            <td>${order.customer}</td>
+                            <td>$<app:formatNumber value="${order.total}" pattern="#,##0.00"/></td>
+                            <td style="text-transform: capitalize;">${order.status}</td>
+                            <td><app:formatDate value="${order.created_at}" pattern="yyyy-MM-dd HH:mm"/></td>
+                        </tr>
+                    </j:forEach>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- System Information -->
+        <div class="admin-card">
+            <h3>⚙️ System Information</h3>
+            <table>
+                <tr>
+                    <td><strong>Database</strong></td>
+                    <td>H2 In-Memory</td>
+                </tr>
+                <tr>
+                    <td><strong>Jelly Version</strong></td>
+                    <td>1.0.1</td>
+                </tr>
+                <tr>
+                    <td><strong>Custom Tags</strong></td>
+                    <td>sqlQuery, sqlUpdate, sqlExecute, formatDate, formatNumber</td>
+                </tr>
+                <tr>
+                    <td><strong>Server</strong></td>
+                    <td>Jetty Embedded</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="admin-card">
+            <h3>🔧 Actions</h3>
+            <button class="button button-success" onclick="alert('Backup would be created')">Backup Database</button>
+            <button class="button" onclick="alert('Data would be exported')">Export Data</button>
+            <button class="button button-danger" onclick="confirm('Clear all data?')">Clear Database</button>
+        </div>
+    </div>
+
+    <script>
+        // Simple interactivity
+        console.log('Admin panel loaded');
+        console.log('This demonstrates how Jelly can be used for dynamic admin interfaces');
+    </script>
+
+</body>
+</html>
+</j:jelly>

@@ -1,0 +1,323 @@
+<?xml version="1.0"?>
+<j:jelly xmlns:j="jelly:core" xmlns:app="app">
+<html>
+<head>
+    <title>Chapter 2: Database Integration Basics</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 20px; }
+        .chapter-nav { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .chapter-nav a { text-decoration: none; color: #f5576c; font-weight: bold; }
+        .content { background: white; padding: 30px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .objective { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .example { background: #f5f5f5; border: 1px solid #ddd; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .code { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; margin: 10px 0; }
+        .exercise { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .success { background: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .demo-box { border: 2px solid #f5576c; padding: 20px; border-radius: 8px; margin: 20px 0; background: #fff5f7; }
+        .key-point { background: #fff9e6; border-left: 4px solid #ffb300; padding: 10px; margin: 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th { background: #f5576c; color: white; padding: 10px; text-align: left; }
+        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f8f9fa; }
+        .warning { background: #ffebee; border-left: 4px solid #f44336; padding: 15px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>📊 Chapter 2: Database Integration Basics</h1>
+        <p>Connecting Jelly to your database with custom SQL tags</p>
+        <p><strong>Duration:</strong> 20 minutes | <strong>Difficulty:</strong> Beginner</p>
+    </div>
+
+    <div class="chapter-nav">
+        <a href="/chapter1.jelly">← Chapter 1</a>
+        <span>Chapter 2 of 10</span>
+        <a href="/chapter3.jelly">Chapter 3 →</a>
+    </div>
+
+    <div class="content">
+        <h2>🎯 Learning Objectives</h2>
+        <div class="objective">
+            <p>By the end of this chapter, you will:</p>
+            <ul>
+                <li>Understand custom SQL tags (<code>&lt;app:sqlQuery&gt;</code>)</li>
+                <li>Execute SELECT queries from Jelly templates</li>
+                <li>Display database results in HTML</li>
+                <li>Access individual fields from result sets</li>
+            </ul>
+        </div>
+
+        <h2>📖 Introduction to Custom SQL Tags</h2>
+        <p>One of the most powerful features of this web application is the ability to query the database directly from Jelly templates using custom tags.</p>
+
+        <div class="key-point">
+            <strong>💡 Key Concept:</strong> Custom tags are Java classes that extend Jelly's functionality. The <code>&lt;app:sqlQuery&gt;</code> tag executes SQL and stores results in a variable.
+        </div>
+
+        <h2>🗄️ Database Schema</h2>
+        <p>Our H2 database has several tables. Let's explore them:</p>
+
+        <app:sqlQuery var="tables">
+            SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES 
+            WHERE TABLE_SCHEMA = 'PUBLIC' 
+            ORDER BY TABLE_NAME
+        </app:sqlQuery>
+
+        <div class="demo-box">
+            <h3>Available Tables:</h3>
+            <ul>
+                <j:forEach var="table" items="${tables}">
+                    <li><strong>${table.table_name}</strong></li>
+                </j:forEach>
+            </ul>
+        </div>
+
+        <h2>🔧 Basic SQL Query Tag</h2>
+
+        <h3>Syntax</h3>
+        <div class="code">&lt;app:sqlQuery var="variableName"&gt;
+    SELECT * FROM table_name
+&lt;/app:sqlQuery&gt;</div>
+
+        <h3>Parameters</h3>
+        <ul>
+            <li><code>var</code> - Variable name to store results (required)</li>
+            <li><code>table</code> - Table name (optional, for documentation)</li>
+        </ul>
+
+        <h2>🎨 Example 1: Simple Query</h2>
+        <div class="example">
+            <p><strong>Code:</strong></p>
+            <div class="code">&lt;app:sqlQuery var="userCount"&gt;
+    SELECT COUNT(*) as count FROM users
+&lt;/app:sqlQuery&gt;
+
+Total users: ${userCount[0].count}</div>
+            
+            <p><strong>Result:</strong></p>
+            <app:sqlQuery var="userCount">
+                SELECT COUNT(*) as count FROM users
+            </app:sqlQuery>
+            <div class="demo-box">
+                <p><strong>Total users:</strong> ${userCount[0].count}</p>
+            </div>
+        </div>
+
+        <div class="key-point">
+            <strong>💡 Understanding Results:</strong> Query results are stored as a list of maps. Use <code>[0]</code> to access the first row, and <code>.fieldname</code> to access a column.
+        </div>
+
+        <h2>🎨 Example 2: Multiple Records</h2>
+        <div class="example">
+            <p><strong>Code:</strong></p>
+            <div class="code">&lt;app:sqlQuery var="users"&gt;
+    SELECT name, email FROM users LIMIT 3
+&lt;/app:sqlQuery&gt;
+
+&lt;j:forEach var="user" items="${users}"&gt;
+    ${user.name} - ${user.email}
+&lt;/j:forEach&gt;</div>
+            
+            <p><strong>Result:</strong></p>
+            <app:sqlQuery var="firstUsers">
+                SELECT name, email FROM users LIMIT 3
+            </app:sqlQuery>
+            <div class="demo-box">
+                <ul>
+                    <j:forEach var="user" items="${firstUsers}">
+                        <li><strong>${user.name}</strong> - ${user.email}</li>
+                    </j:forEach>
+                </ul>
+            </div>
+        </div>
+
+        <h2>🎨 Example 3: Display in Table</h2>
+        <div class="example">
+            <p><strong>Let's query products and display them in a nice table:</strong></p>
+            
+            <app:sqlQuery var="products">
+                SELECT name, price, stock FROM products WHERE active = TRUE LIMIT 5
+            </app:sqlQuery>
+
+            <div class="demo-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <j:forEach var="product" items="${products}">
+                            <tr>
+                                <td>${product.name}</td>
+                                <td>$<app:formatNumber value="${product.price}" pattern="#,##0.00"/></td>
+                                <td>${product.stock} units</td>
+                            </tr>
+                        </j:forEach>
+                    </tbody>
+                </table>
+                <p><em>Showing ${products_count} products</em></p>
+            </div>
+        </div>
+
+        <div class="key-point">
+            <strong>💡 Row Count:</strong> When you create a query with <code>var="products"</code>, an additional variable <code>products_count</code> is automatically created with the number of rows.
+        </div>
+
+        <h2>🎨 Example 4: Conditional Display</h2>
+        <div class="example">
+            <p><strong>Show low stock products:</strong></p>
+            
+            <app:sqlQuery var="lowStock">
+                SELECT name, stock FROM products WHERE stock &lt; 20 AND active = TRUE
+            </app:sqlQuery>
+
+            <div class="demo-box">
+                <j:choose>
+                    <j:when test="${lowStock_count gt 0}">
+                        <h3>⚠️ Low Stock Alert</h3>
+                        <ul>
+                            <j:forEach var="product" items="${lowStock}">
+                                <li>${product.name} - Only ${product.stock} left!</li>
+                            </j:forEach>
+                        </ul>
+                    </j:when>
+                    <j:otherwise>
+                        <p style="color: green;">✅ All products are well stocked!</p>
+                    </j:otherwise>
+                </j:choose>
+            </div>
+        </div>
+
+        <h2>🎨 Example 5: WHERE Clause</h2>
+        <div class="example">
+            <p><strong>Filter data with WHERE:</strong></p>
+            
+            <app:sqlQuery var="activeUsers">
+                SELECT name, role FROM users WHERE active = TRUE
+            </app:sqlQuery>
+
+            <div class="demo-box">
+                <h3>Active Users (${activeUsers_count})</h3>
+                <j:forEach var="user" items="${activeUsers}">
+                    <div style="padding: 10px; margin: 5px 0; background: white; border-radius: 4px;">
+                        <strong>${user.name}</strong>
+                        <span style="padding: 2px 8px; background: #3498db; color: white; border-radius: 3px; font-size: 12px; margin-left: 10px;">
+                            ${user.role}
+                        </span>
+                    </div>
+                </j:forEach>
+            </div>
+        </div>
+
+        <h2>⚠️ Important Notes</h2>
+        <div class="warning">
+            <h3>Security Warning</h3>
+            <p><strong>In Production:</strong> Never use raw SQL in templates with user input! This is for learning purposes only.</p>
+            <p><strong>Always:</strong></p>
+            <ul>
+                <li>Use prepared statements</li>
+                <li>Validate and sanitize user input</li>
+                <li>Implement proper authentication and authorization</li>
+                <li>Use parameterized queries</li>
+            </ul>
+        </div>
+
+        <h2>📝 Your Turn: Exercise</h2>
+        <div class="exercise">
+            <h3>Exercise 2-1: Query Products Under $50</h3>
+            <p><strong>Task:</strong> Write a query to display all products with price less than $50</p>
+            <p><strong>Requirements:</strong></p>
+            <ol>
+                <li>Query products where <code>price &lt; 50</code></li>
+                <li>Display in a table with: Name, Price, Stock</li>
+                <li>Add a conditional message if no products found</li>
+                <li>Show the count of results</li>
+            </ol>
+            
+            <p><strong>Hints:</strong></p>
+            <ul>
+                <li>Use <code>&lt;</code> as <code>&amp;lt;</code> in XML</li>
+                <li>Remember to use <code>&lt;j:choose&gt;</code> for conditionals</li>
+                <li>Use <code>${variableName_count}</code> for count</li>
+            </ul>
+
+            <p><strong>Try it here:</strong></p>
+            <div style="background: white; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                <!-- YOUR CODE GOES HERE -->
+                <app:sqlQuery var="affordableProducts">
+                    SELECT name, price, stock FROM products WHERE price &lt; 50 AND active = TRUE
+                </app:sqlQuery>
+
+                <j:choose>
+                    <j:when test="${affordableProducts_count gt 0}">
+                        <h3>Affordable Products (Under $50)</h3>
+                        <p>Found ${affordableProducts_count} products:</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach var="product" items="${affordableProducts}">
+                                    <tr>
+                                        <td>${product.name}</td>
+                                        <td>$<app:formatNumber value="${product.price}" pattern="#,##0.00"/></td>
+                                        <td>${product.stock}</td>
+                                    </tr>
+                                </j:forEach>
+                            </tbody>
+                        </table>
+                    </j:when>
+                    <j:otherwise>
+                        <p style="color: #e74c3c;">No products found under $50</p>
+                    </j:otherwise>
+                </j:choose>
+            </div>
+        </div>
+
+        <h2>✅ Chapter Summary</h2>
+        <div class="success">
+            <h3>What You Learned:</h3>
+            <ul>
+                <li>✓ How to use <code>&lt;app:sqlQuery&gt;</code> custom tag</li>
+                <li>✓ Executing SELECT statements from Jelly</li>
+                <li>✓ Accessing query results with <code>[index].fieldname</code></li>
+                <li>✓ Iterating over result sets with <code>&lt;j:forEach&gt;</code></li>
+                <li>✓ Using <code>variableName_count</code> for row counts</li>
+                <li>✓ Displaying data in HTML tables</li>
+            </ul>
+        </div>
+
+        <h2>🔍 Quick Quiz</h2>
+        <div class="example">
+            <p><strong>Q1:</strong> How do you access the first row of query results?</p>
+            <p><strong>Q2:</strong> What variable gives you the count of results?</p>
+            <p><strong>Q3:</strong> Why must we use <code>&amp;lt;</code> instead of <code>&lt;</code> in queries?</p>
+            <p><em>Make sure you can answer these before Chapter 3!</em></p>
+        </div>
+
+        <h2>🎓 Ready for More?</h2>
+        <div class="key-point">
+            <p><strong>Great job completing Chapter 2!</strong></p>
+            <p>You now know how to query databases from Jelly templates. In Chapter 3, we'll learn advanced list building and conditional styling.</p>
+            <p><strong>Next:</strong> <a href="/chapter3.jelly">Chapter 3: Building Dynamic Lists →</a></p>
+        </div>
+    </div>
+
+    <div class="chapter-nav">
+        <a href="/chapter1.jelly">← Chapter 1</a>
+        <span>Chapter 2 of 10</span>
+        <a href="/chapter3.jelly">Chapter 3: Dynamic Lists →</a>
+    </div>
+
+</body>
+</html>
+</j:jelly>

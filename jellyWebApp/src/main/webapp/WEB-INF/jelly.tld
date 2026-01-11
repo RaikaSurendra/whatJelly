@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+        http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>app</short-name>
+    <uri>app</uri>
+    <description>Custom application tags for database access</description>
+
+    <tag>
+        <name>sqlQuery</name>
+        <tag-class>com.example.webapp.tags.SqlQueryTag</tag-class>
+        <body-content>scriptless</body-content>
+        <description>Execute SQL query and store results</description>
+        <attribute>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>table</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>sqlUpdate</name>
+        <tag-class>com.example.webapp.tags.SqlUpdateTag</tag-class>
+        <body-content>scriptless</body-content>
+        <description>Execute SQL update statement</description>
+        <attribute>
+            <name>var</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>sqlExecute</name>
+        <tag-class>com.example.webapp.tags.SqlExecuteTag</tag-class>
+        <body-content>scriptless</body-content>
+        <description>Execute arbitrary SQL statement</description>
+    </tag>
+
+    <tag>
+        <name>formatDate</name>
+        <tag-class>com.example.webapp.tags.FormatDateTag</tag-class>
+        <body-content>empty</body-content>
+        <description>Format date value</description>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>pattern</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>formatNumber</name>
+        <tag-class>com.example.webapp.tags.FormatNumberTag</tag-class>
+        <body-content>empty</body-content>
+        <description>Format number value</description>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>pattern</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+</taglib>

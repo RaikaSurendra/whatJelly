@@ -1,0 +1,225 @@
+<?xml version="1.0"?>
+<j:jelly xmlns:j="jelly:core" xmlns:app="app">
+<html>
+<head>
+    <title>Chapter 1: Hello Jelly Web</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 20px; }
+        .chapter-nav { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .chapter-nav a { text-decoration: none; color: #667eea; font-weight: bold; }
+        .content { background: white; padding: 30px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .objective { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .example { background: #f5f5f5; border: 1px solid #ddd; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .code { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; margin: 10px 0; }
+        .exercise { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .success { background: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        h1, h2, h3 { color: #333; }
+        .demo-box { border: 2px solid #667eea; padding: 20px; border-radius: 8px; margin: 20px 0; background: #f8f9ff; }
+        .key-point { background: #fff9e6; border-left: 4px solid #ffb300; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>📘 Chapter 1: Hello Jelly Web</h1>
+        <p>Understanding the basics of Jelly in a web application</p>
+        <p><strong>Duration:</strong> 15 minutes | <strong>Difficulty:</strong> Beginner</p>
+    </div>
+
+    <div class="chapter-nav">
+        <a href="/">← Home</a>
+        <span>Chapter 1 of 10</span>
+        <a href="/chapter2.jelly">Chapter 2 →</a>
+    </div>
+
+    <div class="content">
+        <h2>🎯 Learning Objectives</h2>
+        <div class="objective">
+            <p>By the end of this chapter, you will:</p>
+            <ul>
+                <li>Understand how Jelly templates are processed by servlets</li>
+                <li>Use basic Jelly tags to display content</li>
+                <li>Access request and session variables</li>
+                <li>Implement simple conditional logic</li>
+            </ul>
+        </div>
+
+        <h2>📖 Introduction</h2>
+        <p>Welcome to your first Jelly web page! Unlike standalone Jelly scripts, this page is served by a Java servlet that processes the Jelly template and returns HTML to your browser.</p>
+
+        <h3>How It Works</h3>
+        <p>When you request a <code>.jelly</code> file:</p>
+        <ol>
+            <li>The <code>JellyServlet</code> intercepts the request</li>
+            <li>It creates a <code>JellyContext</code> with request data</li>
+            <li>The Jelly template is compiled and executed</li>
+            <li>HTML output is sent to your browser</li>
+        </ol>
+
+        <div class="key-point">
+            <strong>💡 Key Point:</strong> Jelly templates combine static HTML with dynamic tags that execute on the server to generate the final page.
+        </div>
+
+        <h2>🔧 Basic Jelly Tags</h2>
+
+        <h3>1. Displaying Content: &lt;j:out&gt;</h3>
+        <div class="example">
+            <p><strong>Code:</strong></p>
+            <div class="code">&lt;j:out value="Hello, Jelly!"/&gt;</div>
+            <p><strong>Result:</strong></p>
+            <div class="demo-box">
+                <j:out value="Hello, Jelly!"/>
+            </div>
+        </div>
+
+        <h3>2. Setting Variables: &lt;j:set&gt;</h3>
+        <div class="example">
+            <p><strong>Code:</strong></p>
+            <div class="code">&lt;j:set var="greeting" value="Welcome to Chapter 1"/&gt;
+&lt;j:out value="${greeting}"/&gt;</div>
+            <p><strong>Result:</strong></p>
+            <j:set var="greeting" value="Welcome to Chapter 1"/>
+            <div class="demo-box">
+                <j:out value="${greeting}"/>
+            </div>
+        </div>
+
+        <h3>3. Conditional Logic: &lt;j:if&gt;</h3>
+        <div class="example">
+            <p><strong>Code:</strong></p>
+            <div class="code">&lt;j:set var="score" value="85"/&gt;
+&lt;j:if test="${score >= 80}"&gt;
+    Excellent work!
+&lt;/j:if&gt;</div>
+            <p><strong>Result:</strong></p>
+            <j:set var="score" value="85"/>
+            <div class="demo-box">
+                <j:if test="${score >= 80}">
+                    ✅ Excellent work! (Score: ${score})
+                </j:if>
+            </div>
+        </div>
+
+        <h2>🌐 Accessing Request Data</h2>
+        <p>The servlet automatically provides access to request information:</p>
+
+        <div class="example">
+            <p><strong>Available Variables:</strong></p>
+            <div class="demo-box">
+                <p><strong>Request URI:</strong> ${request.requestURI}</p>
+                <p><strong>Request Method:</strong> ${request.method}</p>
+                <p><strong>Server Name:</strong> ${request.serverName}</p>
+                <p><strong>Server Port:</strong> ${request.serverPort}</p>
+            </div>
+        </div>
+
+        <h2>🎨 Live Examples</h2>
+
+        <h3>Example 1: Dynamic Greeting</h3>
+        <j:set var="hour" value="${System.currentTimeMillis() / 3600000 % 24}"/>
+        <div class="demo-box">
+            <j:choose>
+                <j:when test="${hour lt 12}">
+                    <h3>🌅 Good Morning!</h3>
+                    <p>Time to learn some Jelly!</p>
+                </j:when>
+                <j:when test="${hour lt 18}">
+                    <h3>☀️ Good Afternoon!</h3>
+                    <p>Great time to code!</p>
+                </j:when>
+                <j:otherwise>
+                    <h3>🌙 Good Evening!</h3>
+                    <p>Evening learning session!</p>
+                </j:otherwise>
+            </j:choose>
+        </div>
+
+        <h3>Example 2: Simple Calculator</h3>
+        <j:set var="num1" value="15"/>
+        <j:set var="num2" value="7"/>
+        <div class="demo-box">
+            <p><strong>Calculator Demo:</strong></p>
+            <ul>
+                <li>${num1} + ${num2} = ${num1 + num2}</li>
+                <li>${num1} - ${num2} = ${num1 - num2}</li>
+                <li>${num1} × ${num2} = ${num1 * num2}</li>
+                <li>${num1} ÷ ${num2} = ${num1 / num2}</li>
+            </ul>
+        </div>
+
+        <h3>Example 3: Conditional Styling</h3>
+        <j:set var="temperature" value="28"/>
+        <div class="demo-box">
+            <p><strong>Temperature:</strong> ${temperature}°C</p>
+            <j:choose>
+                <j:when test="${temperature gt 30}">
+                    <p style="color: red; font-weight: bold;">🔥 It's hot! Stay hydrated!</p>
+                </j:when>
+                <j:when test="${temperature gt 20}">
+                    <p style="color: green; font-weight: bold;">☀️ Nice weather!</p>
+                </j:when>
+                <j:otherwise>
+                    <p style="color: blue; font-weight: bold;">❄️ It's cold! Dress warmly!</p>
+                </j:otherwise>
+            </j:choose>
+        </div>
+
+        <h2>📝 Your Turn: Exercise</h2>
+        <div class="exercise">
+            <h3>Exercise 1-1: Personalize This Page</h3>
+            <p><strong>Task:</strong> Open this file (<code>chapter1.jelly</code>) and modify it to:</p>
+            <ol>
+                <li>Display your name using a variable</li>
+                <li>Show the current timestamp</li>
+                <li>Add a conditional that displays a message based on whether it's a weekday or weekend</li>
+            </ol>
+            <p><strong>Hints:</strong></p>
+            <ul>
+                <li>Use <code>&lt;j:set var="myName" value="Your Name"/&gt;</code></li>
+                <li>Use <code>${System.currentTimeMillis()}</code> for timestamp</li>
+                <li>Day of week can be calculated from timestamp</li>
+            </ul>
+        </div>
+
+        <h2>✅ Chapter Summary</h2>
+        <div class="success">
+            <h3>What You Learned:</h3>
+            <ul>
+                <li>✓ How Jelly templates are processed in a web application</li>
+                <li>✓ Basic Jelly tags: <code>&lt;j:out&gt;</code>, <code>&lt;j:set&gt;</code>, <code>&lt;j:if&gt;</code></li>
+                <li>✓ Accessing request and session variables</li>
+                <li>✓ Using expressions in Jelly: <code>${...}</code></li>
+                <li>✓ Conditional logic with <code>&lt;j:choose&gt;</code></li>
+            </ul>
+        </div>
+
+        <h2>🔍 Quick Quiz</h2>
+        <div class="example">
+            <p><strong>Q1:</strong> What tag is used to display a value?</p>
+            <p><strong>Q2:</strong> How do you reference a variable in Jelly?</p>
+            <p><strong>Q3:</strong> What's the difference between <code>&lt;j:if&gt;</code> and <code>&lt;j:choose&gt;</code>?</p>
+            <p><em>Think about these before moving to Chapter 2!</em></p>
+        </div>
+
+        <h2>📚 Additional Resources</h2>
+        <ul>
+            <li><a href="/index.jelly">Main Demo Pages</a> - See more complex examples</li>
+            <li><a href="https://commons.apache.org/proper/commons-jelly/" target="_blank">Apache Jelly Documentation</a></li>
+            <li>Check <code>../examples/</code> folder for standalone Jelly examples</li>
+        </ul>
+
+        <div class="key-point">
+            <strong>🎓 Ready for more?</strong> Once you've completed the exercise and understand the basics, move on to Chapter 2 where we'll connect to a database!
+        </div>
+    </div>
+
+    <div class="chapter-nav">
+        <a href="/">← Home</a>
+        <span>Chapter 1 of 10</span>
+        <a href="/chapter2.jelly">Chapter 2: Database Integration →</a>
+    </div>
+
+</body>
+</html>
+</j:jelly>
