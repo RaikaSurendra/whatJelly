@@ -1,5 +1,73 @@
 # Apache Jelly Learning Project
 
+A comprehensive learning environment for understanding Apache Jelly through practical examples and documentation.
+
+## 🚀 Quick Setup
+
+### Prerequisites
+
+1. **Java 11 or higher**
+   ```bash
+   # Check Java version
+   java -version
+   
+   # If not installed, download from:
+   # https://adoptium.net/ or https://www.oracle.com/java/technologies/downloads/
+   ```
+
+2. **Maven 3.6 or higher**
+   ```bash
+   # Check Maven version
+   mvn -version
+   
+   # If not installed:
+   # macOS: brew install maven
+   # Linux: sudo apt-get install maven
+   # Windows: Download from https://maven.apache.org/download.cgi
+   ```
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/RaikaSurendra/whatJelly.git
+   cd whatJelly
+   ```
+
+2. **Compile the project**
+   ```bash
+   mvn clean compile
+   ```
+   This will download all dependencies (Apache Jelly, JEXL, etc.) and compile the Java sources.
+
+3. **Run your first example**
+   ```bash
+   # Make the script executable (Unix/Mac)
+   chmod +x run-example.sh
+   
+   # Run hello world example
+   ./run-example.sh 01-hello-world
+   ```
+
+### Available Commands
+
+```bash
+# Run all examples
+./run-example.sh all
+
+# Run specific example
+./run-example.sh 02-variables
+./run-example.sh 04-loops
+
+# Run practical examples
+./run-example.sh code-generator
+./run-example.sh sql-generator
+
+# Run with Maven directly
+mvn exec:java -Dexec.mainClass="com.learning.jelly.JellyRunner" \
+  -Dexec.args="examples/01-hello-world.jelly"
+```
+
 ## What is Apache Jelly?
 
 Apache Jelly is a **Java and XML-based scripting and processing engine**. It's a tool for turning XML into executable code. Jelly combines the power of:
