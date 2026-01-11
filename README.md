@@ -140,8 +140,62 @@ whatJelly/
 │   ├── PERFORMANCE.md - Optimization guide
 │   └── DEBUGGING.md - Debugging strategies
 │
+├── 🌐 jellyWebApp/ - Full-stack web application
+│   ├── README.md - Web application guide
+│   ├── DOCKER.md - Docker deployment
+│   ├── TAG_LIBRARY_EXPLAINED.md - Tag library architecture
+│   └── CHAPTERS.md - Step-by-step tutorial
+│
 └── 📁 src/main/java/ - Java utilities
 ```
+
+## 🌐 Full-Stack Web Application
+
+### **jellyWebApp** - Production-Ready Jelly Web Application
+
+After learning the basics, explore our **complete servlet-based web application** that demonstrates real-world Jelly usage:
+
+**📂 Location:** [`jellyWebApp/`](jellyWebApp/README.md)
+
+**Features:**
+- ✅ **Servlet Integration** - JellyServlet handling .jelly template requests
+- ✅ **Custom SQL Tags** - `<app:sqlQuery>`, `<app:sqlUpdate>`, `<app:sqlExecute>`
+- ✅ **H2 Database** - In-memory database with sample data
+- ✅ **Interactive D3.js Visualizations** - Architecture diagrams showing:
+  - Request lifecycle (browser → response)
+  - TagLibrary & TagSupport class hierarchy
+  - Tag processing flow with code examples
+- ✅ **Docker Support** - Multi-stage builds, docker-compose
+- ✅ **Multiple Pages** - Users, Products, Dashboard, Admin, Architecture
+- ✅ **Enhanced Tooltips** - Hover over any element for detailed technical info
+- ✅ **Chapter-Based Tutorial** - Learn by building
+
+**Quick Start:**
+```bash
+cd jellyWebApp
+
+# Run with Docker (recommended)
+docker-compose up -d
+
+# Or run locally
+./run.sh
+
+# Access at http://localhost:8080
+```
+
+**Why This Matters:**
+The web app bridges the gap between learning examples and production code. You'll see:
+- How to integrate Jelly with Java servlets
+- How to create custom tag libraries
+- How tags are registered and looked up
+- Real database integration patterns
+- Professional D3.js visualizations
+
+**Documentation:**
+- [📖 Full README](jellyWebApp/README.md) - Setup and usage
+- [🐳 Docker Guide](jellyWebApp/DOCKER.md) - Deployment details
+- [🏷️ Tag Library Explained](jellyWebApp/TAG_LIBRARY_EXPLAINED.md) - Architecture deep-dive
+- [📚 Chapter Tutorial](jellyWebApp/CHAPTERS.md) - Step-by-step learning
 
 ## Learning Path
 
@@ -154,11 +208,13 @@ whatJelly/
 - Try practical examples (code-generator, sql-generator)
 - Read `CONCEPTS.md` for deeper understanding
 - Experiment with modifications
+- **⭐ Explore `jellyWebApp/` for real-world application**
 
 ### 3. **Advanced** → Master the tool
 - Explore `advanced/` folder
 - Study `ADVANCED_PATTERNS.md`
 - Read `PERFORMANCE.md` and `DEBUGGING.md`
+- **⭐ Study jellyWebApp architecture visualizations**
 - Build complex applications
 
 ## Running Jelly
