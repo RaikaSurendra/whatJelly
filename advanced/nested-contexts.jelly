@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!-- 
+  Advanced Example: Nested Contexts
+  Demonstrates: Parent-child context relationships and variable scoping
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <j:out value="=== Nested Contexts Example ==="/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Global scope variables -->
+  <j:set var="globalVar" value="I'm in global scope"/>
+  <j:set var="sharedCounter" value="0"/>
+  
+  <j:out value="Global variable: ${globalVar}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Initial counter: ${sharedCounter}"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- First nested scope -->
+  <j:out value="--- Entering Scope 1 ---"/>
+  <j:out value="${'\n'}"/>
+  <j:scope>
+    <!-- Can access parent variables -->
+    <j:out value="Accessing parent: ${globalVar}"/>
+    <j:out value="${'\n'}"/>
+    
+    <!-- Set local variable -->
+    <j:set var="scope1Var" value="I'm in scope 1"/>
+    <j:out value="Local variable: ${scope1Var}"/>
+    <j:out value="${'\n'}"/>
+    
+    <!-- Modify parent variable -->
+    <j:set var="sharedCounter" value="${sharedCounter + 1}"/>
+    <j:out value="Modified counter: ${sharedCounter}"/>
+    <j:out value="${'\n'}"/>
+    
+    <!-- Nested scope within scope 1 -->
+    <j:out value="${'\n'}"/>
+    <j:out value="  --- Entering Scope 1.1 ---"/>
+    <j:out value="${'\n'}"/>
+    <j:scope>
+      <j:out value="  Accessing global: ${globalVar}"/>
+      <j:out value="${'\n'}"/>
+      <j:out value="  Accessing parent scope: ${scope1Var}"/>
+      <j:out value="${'\n'}"/>
+      
+      <j:set var="scope1_1Var" value="I'm in scope 1.1"/>
+      <j:out value="  Local to 1.1: ${scope1_1Var}"/>
+      <j:out value="${'\n'}"/>
+      
+      <j:set var="sharedCounter" value="${sharedCounter + 10}"/>
+      <j:out value="  Counter in 1.1: ${sharedCounter}"/>
+      <j:out value="${'\n'}"/>
+    </j:scope>
+    <j:out value="  --- Exited Scope 1.1 ---"/>
+    <j:out value="${'\n\n'}"/>
+    
+    <!-- scope1_1Var is not accessible here -->
+    <j:out value="Back in scope 1, counter: ${sharedCounter}"/>
+    <j:out value="${'\n'}"/>
+  </j:scope>
+  <j:out value="--- Exited Scope 1 ---"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Second independent scope -->
+  <j:out value="--- Entering Scope 2 ---"/>
+  <j:out value="${'\n'}"/>
+  <j:scope>
+    <j:out value="Global still accessible: ${globalVar}"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="Counter value: ${sharedCounter}"/>
+    <j:out value="${'\n'}"/>
+    
+    <!-- scope1Var is NOT accessible here -->
+    <j:set var="scope2Var" value="I'm in scope 2"/>
+    <j:out value="Local to scope 2: ${scope2Var}"/>
+    <j:out value="${'\n'}"/>
+    
+    <j:set var="sharedCounter" value="${sharedCounter + 100}"/>
+    <j:out value="Final counter: ${sharedCounter}"/>
+    <j:out value="${'\n'}"/>
+  </j:scope>
+  <j:out value="--- Exited Scope 2 ---"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Back in global scope -->
+  <j:out value="=== Back in Global Scope ==="/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Global variable: ${globalVar}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Final counter (modified by all scopes): ${sharedCounter}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Demonstrate variable shadowing -->
+  <j:out value="${'\n'}"/>
+  <j:out value="=== Variable Shadowing ==="/>
+  <j:out value="${'\n'}"/>
+  <j:set var="shadowMe" value="Original value"/>
+  <j:out value="Before scope: ${shadowMe}"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:scope>
+    <!-- This shadows the parent variable -->
+    <j:set var="shadowMe" value="Shadowed value"/>
+    <j:out value="Inside scope: ${shadowMe}"/>
+    <j:out value="${'\n'}"/>
+  </j:scope>
+  
+  <j:out value="After scope: ${shadowMe}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="(Original value preserved!)"/>
+  
+</j:jelly>

@@ -22,11 +22,18 @@ if [ -z "$1" ]; then
     echo "    config-generator"
     echo "    html-report"
     echo ""
+    echo "  Advanced Examples:"
+    echo "    nested-contexts"
+    echo "    script-library"
+    echo "    data-driven-generation"
+    echo "    dynamic-script-composition"
+    echo ""
     echo "  Special:"
     echo "    all           - Run all basic examples"
     echo "    context-demo  - Run JellyContext demonstration"
     echo ""
     echo "Example: ./run-example.sh 01-hello-world"
+    echo "Example: ./run-example.sh nested-contexts"
     exit 1
 fi
 
@@ -41,6 +48,11 @@ elif [[ "$EXAMPLE" == practical/* ]] || [[ "$EXAMPLE" == code-generator ]] || [[
         EXAMPLE="practical/$EXAMPLE"
     fi
     mvn compile exec:java -Dexec.mainClass="com.learning.jelly.JellyRunner" -Dexec.args="examples/${EXAMPLE}.jelly"
+elif [[ "$EXAMPLE" == advanced/* ]] || [[ "$EXAMPLE" == nested-contexts ]] || [[ "$EXAMPLE" == script-library ]] || [[ "$EXAMPLE" == data-driven-generation ]] || [[ "$EXAMPLE" == dynamic-script-composition ]]; then
+    if [[ "$EXAMPLE" != advanced/* ]]; then
+        EXAMPLE="advanced/$EXAMPLE"
+    fi
+    mvn compile exec:java -Dexec.mainClass="com.learning.jelly.JellyRunner" -Dexec.args="${EXAMPLE}.jelly"
 else
     mvn compile exec:java -Dexec.mainClass="com.learning.jelly.JellyRunner" -Dexec.args="examples/${EXAMPLE}.jelly"
 fi

@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<!-- 
+  Advanced Example: Script Library Pattern
+  Demonstrates: Creating reusable script components and modules
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <j:out value="=== Script Library Pattern ==="/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Define reusable formatting utilities -->
+  <j:out value="--- Formatting Utilities ---"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Utility: Format currency -->
+  <j:set var="formatCurrency">
+    <j:scope>
+      <j:set var="formatted" value="${'$' + String.format('%.2f', amount)}"/>
+      <j:out value="${formatted}"/>
+    </j:scope>
+  </j:set>
+  
+  <!-- Utility: Format percentage -->
+  <j:set var="formatPercent">
+    <j:scope>
+      <j:set var="formatted" value="${String.format('%.1f', percent)}%"/>
+      <j:out value="${formatted}"/>
+    </j:scope>
+  </j:set>
+  
+  <!-- Utility: Create separator line -->
+  <j:set var="separator">
+    <j:scope>
+      <j:forEach var="i" begin="1" end="${length}">
+        <j:out value="${char}"/>
+      </j:forEach>
+      <j:out value="${'\n'}"/>
+    </j:scope>
+  </j:set>
+  
+  <!-- Example usage of utilities -->
+  <j:out value="${'\n'}"/>
+  <j:out value="Example Report"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Create separator -->
+  <j:set var="length" value="40"/>
+  <j:set var="char" value="="/>
+  <j:out value="${separator}"/>
+  
+  <!-- Format some financial data -->
+  <j:set var="revenue" value="125000.5"/>
+  <j:set var="expenses" value="87500.25"/>
+  <j:set var="profit" value="${revenue - expenses}"/>
+  <j:set var="margin" value="${(profit / revenue) * 100}"/>
+  
+  <j:out value="Revenue:  "/>
+  <j:set var="amount" value="${revenue}"/>
+  <j:out value="${'$' + String.format('%.2f', amount)}"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:out value="Expenses: "/>
+  <j:set var="amount" value="${expenses}"/>
+  <j:out value="${'$' + String.format('%.2f', amount)}"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:out value="Profit:   "/>
+  <j:set var="amount" value="${profit}"/>
+  <j:out value="${'$' + String.format('%.2f', amount)}"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:out value="Margin:   "/>
+  <j:set var="percent" value="${margin}"/>
+  <j:out value="${String.format('%.1f', percent)}%"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:set var="char" value="-"/>
+  <j:out value="${separator}"/>
+  
+  <!-- Table Generator Module -->
+  <j:out value="${'\n\n'}"/>
+  <j:out value="--- Table Generator Module ---"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Simulate a data set -->
+  <j:set var="products" value="Product A,Product B,Product C"/>
+  <j:set var="prices" value="19.99,29.99,39.99"/>
+  <j:set var="quantities" value="100,75,50"/>
+  
+  <!-- Split and process -->
+  <j:set var="productArray" value="${products.split(',\\s*')}"/>
+  <j:set var="priceArray" value="${prices.split(',\\s*')}"/>
+  <j:set var="qtyArray" value="${quantities.split(',\\s*')}"/>
+  
+  <j:out value="Product Report"/>
+  <j:out value="${'\n'}"/>
+  <j:set var="length" value="50"/>
+  <j:set var="char" value="="/>
+  <j:forEach var="i" begin="1" end="${length}">
+    <j:out value="${char}"/>
+  </j:forEach>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Header -->
+  <j:out value="Product          Price      Qty      Total"/>
+  <j:out value="${'\n'}"/>
+  <j:forEach var="i" begin="1" end="${length}">
+    <j:out value="-"/>
+  </j:forEach>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Rows (simplified - JEXL 1.1 limitations) -->
+  <j:forEach var="i" begin="0" end="2">
+    <j:set var="product" value="${productArray[i]}"/>
+    <j:set var="price" value="${priceArray[i]}"/>
+    <j:set var="qty" value="${qtyArray[i]}"/>
+    <j:set var="total" value="${Double.parseDouble(price) * Double.parseDouble(qty)}"/>
+    
+    <!-- Format output with padding (simplified) -->
+    <j:out value="${product}"/>
+    <j:out value="  $${price}"/>
+    <j:out value="  ${qty}"/>
+    <j:out value="  $${String.format('%.2f', total)}"/>
+    <j:out value="${'\n'}"/>
+  </j:forEach>
+  
+  <j:out value="${'\n'}"/>
+  <j:out value="=== Reusable patterns demonstrated ==="/>
+  
+</j:jelly>

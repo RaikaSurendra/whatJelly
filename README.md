@@ -117,6 +117,50 @@ Jelly provides several built-in tag libraries:
 - **Testing** - Dynamic test generation
 - **Configuration** - Dynamic configuration files
 
+## Project Structure
+
+```
+whatJelly/
+├── 📖 Documentation
+│   ├── README.md - This file
+│   ├── QUICKSTART.md - Quick setup guide
+│   ├── TUTORIAL.md - Comprehensive tutorial
+│   └── CONCEPTS.md - Deep dive into architecture
+│
+├── 📁 examples/ - Basic examples (01-10)
+│   └── practical/ - Real-world examples
+│
+├── 🎓 advanced/ - Advanced concepts and patterns
+│   ├── README.md - Advanced examples guide
+│   ├── nested-contexts.jelly
+│   ├── script-library.jelly
+│   ├── data-driven-generation.jelly
+│   ├── dynamic-script-composition.jelly
+│   ├── ADVANCED_PATTERNS.md - Design patterns
+│   ├── PERFORMANCE.md - Optimization guide
+│   └── DEBUGGING.md - Debugging strategies
+│
+└── 📁 src/main/java/ - Java utilities
+```
+
+## Learning Path
+
+### 1. **Beginners** → Start here!
+- Read `QUICKSTART.md` for setup
+- Run basic examples (01-10)
+- Study `TUTORIAL.md`
+
+### 2. **Intermediate** → Apply knowledge
+- Try practical examples (code-generator, sql-generator)
+- Read `CONCEPTS.md` for deeper understanding
+- Experiment with modifications
+
+### 3. **Advanced** → Master the tool
+- Explore `advanced/` folder
+- Study `ADVANCED_PATTERNS.md`
+- Read `PERFORMANCE.md` and `DEBUGGING.md`
+- Build complex applications
+
 ## Running Jelly
 
 ```bash
@@ -128,3 +172,14 @@ JellyContext context = new JellyContext();
 XMLOutput output = XMLOutput.createXMLOutput(System.out);
 context.runScript("script.jelly", output);
 ```
+
+## Advanced Topics
+
+Ready for more? Check out the `advanced/` folder:
+- **Nested Contexts** - Master variable scoping
+- **Script Composition** - Build modular scripts
+- **Data-Driven Generation** - Complex code generation
+- **Performance Optimization** - Speed and memory tuning
+- **Debugging Techniques** - Troubleshoot like a pro
+
+See [advanced/README.md](advanced/README.md) for details.

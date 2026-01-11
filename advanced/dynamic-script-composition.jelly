@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<!-- 
+  Advanced Example: Dynamic Script Composition
+  Demonstrates: Building complex outputs by composing multiple script fragments
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <j:out value="=== Dynamic Script Composition ==="/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Define reusable fragments as variables -->
+  
+  <!-- Fragment 1: Header generator -->
+  <j:set var="generateHeader">
+    <j:scope>
+      <j:out value="/*"/>
+      <j:out value="${'\n'}"/>
+      <j:out value=" * ${title}"/>
+      <j:out value="${'\n'}"/>
+      <j:out value=" * Generated: ${System.currentTimeMillis()}"/>
+      <j:out value="${'\n'}"/>
+      <j:out value=" * Author: ${author}"/>
+      <j:out value="${'\n'}"/>
+      <j:out value=" */"/>
+      <j:out value="${'\n\n'}"/>
+    </j:scope>
+  </j:set>
+  
+  <!-- Fragment 2: Import generator -->
+  <j:set var="generateImports">
+    <j:scope>
+      <j:set var="imports" value="${importList.split(',\\s*')}"/>
+      <j:forEach var="imp" items="${imports}">
+        <j:out value="import ${imp};"/>
+        <j:out value="${'\n'}"/>
+      </j:forEach>
+      <j:out value="${'\n'}"/>
+    </j:scope>
+  </j:set>
+  
+  <!-- Fragment 3: Class declaration -->
+  <j:set var="generateClassDeclaration">
+    <j:scope>
+      <j:out value="public class ${className} {"/>
+      <j:out value="${'\n\n'}"/>
+    </j:scope>
+  </j:set>
+  
+  <!-- Fragment 4: Method generator -->
+  <j:set var="generateMethod">
+    <j:scope>
+      <j:out value="    ${visibility} ${returnType} ${methodName}("/>
+      <j:if test="${params != null and params != ''}">
+        <j:out value="${params}"/>
+      </j:if>
+      <j:out value=") {"/>
+      <j:out value="${'\n'}"/>
+      <j:if test="${returnType != 'void'}">
+        <j:out value="        return "/>
+        <j:choose>
+          <j:when test="${returnType == 'String'}">
+            <j:out value="&quot;&quot;;"/>
+          </j:when>
+          <j:when test="${returnType == 'int' or returnType == 'long'}">
+            <j:out value="0;"/>
+          </j:when>
+          <j:when test="${returnType == 'boolean'}">
+            <j:out value="false;"/>
+          </j:when>
+          <j:otherwise>
+            <j:out value="null;"/>
+          </j:otherwise>
+        </j:choose>
+      </j:if>
+      <j:out value="${'\n'}"/>
+      <j:out value="    }"/>
+      <j:out value="${'\n\n'}"/>
+    </j:scope>
+  </j:set>
+  
+  <!-- Now compose a complete class using fragments -->
+  <j:out value="=== Composing Service Class ==="/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Set parameters for composition -->
+  <j:set var="title" value="User Service"/>
+  <j:set var="author" value="Code Generator"/>
+  <j:set var="className" value="UserService"/>
+  <j:set var="importList" value="java.util.List, java.util.Optional, com.example.model.User"/>
+  
+  <!-- Generate header -->
+  <j:scope>
+    <j:out value="/*"/>
+    <j:out value="${'\n'}"/>
+    <j:out value=" * ${title}"/>
+    <j:out value="${'\n'}"/>
+    <j:out value=" * Generated: ${System.currentTimeMillis()}"/>
+    <j:out value="${'\n'}"/>
+    <j:out value=" * Author: ${author}"/>
+    <j:out value="${'\n'}"/>
+    <j:out value=" */"/>
+    <j:out value="${'\n\n'}"/>
+  </j:scope>
+  
+  <!-- Generate imports -->
+  <j:scope>
+    <j:set var="imports" value="${importList.split(',\\s*')}"/>
+    <j:forEach var="imp" items="${imports}">
+      <j:out value="import ${imp};"/>
+      <j:out value="${'\n'}"/>
+    </j:forEach>
+    <j:out value="${'\n'}"/>
+  </j:scope>
+  
+  <!-- Generate class declaration -->
+  <j:out value="public class ${className} {"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Generate multiple methods using the fragment -->
+  <j:set var="methods" value="findAll:List:,findById:Optional:Long id,save:User:User user,deleteById:void:Long id"/>
+  <j:set var="methodDefs" value="${methods.split(',\\s*')}"/>
+  
+  <j:forEach var="methodDef" items="${methodDefs}">
+    <j:set var="parts" value="${methodDef.split(':\\s*')}"/>
+    <j:set var="methodName" value="${parts[0]}"/>
+    <j:set var="returnType" value="${parts[1]}"/>
+    <j:set var="params" value="${parts[2]}"/>
+    
+    <!-- Use method fragment -->
+    <j:scope>
+      <j:out value="    public ${returnType} ${methodName}("/>
+      <j:if test="${params != null and params != '' and params != 'null'}">
+        <j:out value="${params}"/>
+      </j:if>
+      <j:out value=") {"/>
+      <j:out value="${'\n'}"/>
+      <j:if test="${returnType != 'void'}">
+        <j:out value="        return "/>
+        <j:choose>
+          <j:when test="${returnType == 'String'}">
+            <j:out value="&quot;&quot;;"/>
+          </j:when>
+          <j:when test="${returnType == 'int' or returnType == 'long'}">
+            <j:out value="0;"/>
+          </j:when>
+          <j:when test="${returnType == 'boolean'}">
+            <j:out value="false;"/>
+          </j:when>
+          <j:otherwise>
+            <j:out value="null;"/>
+          </j:otherwise>
+        </j:choose>
+      </j:if>
+      <j:out value="${'\n'}"/>
+      <j:out value="    }"/>
+      <j:out value="${'\n\n'}"/>
+    </j:scope>
+  </j:forEach>
+  
+  <!-- Close class -->
+  <j:out value="}"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:out value="=== Composition demonstrates modularity and reusability ==="/>
+  
+</j:jelly>

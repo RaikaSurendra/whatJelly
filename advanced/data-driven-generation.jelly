@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<!-- 
+  Advanced Example: Data-Driven Code Generation
+  Demonstrates: Generating complex Java classes from configuration data
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <!-- Configuration for class generation -->
+  <j:set var="packageName" value="com.example.model"/>
+  <j:set var="className" value="Employee"/>
+  <j:set var="extends" value="BaseEntity"/>
+  <j:set var="implements" value="Serializable, Comparable"/>
+  
+  <!-- Field definitions (name:type:annotations) -->
+  <j:set var="fieldDefs" value="id:Long:@Id @GeneratedValue,firstName:String:@Column(nullable=false),lastName:String:@Column(nullable=false),email:String:@Column(unique=true),department:String:,salary:Double:@Column(nullable=false),hireDate:Date:@Temporal(TemporalType.DATE)"/>
+  
+  <j:out value="// Generated Java Class"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="// Generation timestamp: ${System.currentTimeMillis()}"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Package declaration -->
+  <j:out value="package ${packageName};"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Imports -->
+  <j:out value="import java.io.Serializable;"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="import java.util.Date;"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="import java.util.Objects;"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="import javax.persistence.*;"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Class declaration with annotations -->
+  <j:out value="@Entity"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="@Table(name = "/>
+  <j:out value="&quot;${className.toLowerCase()}s&quot;"/>
+  <j:out value=")"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="public class ${className}"/>
+  <j:if test="${extends != null and extends != ''}">
+    <j:out value=" extends ${extends}"/>
+  </j:if>
+  <j:if test="${implements != null and implements != ''}">
+    <j:out value=" implements ${implements}"/>
+  </j:if>
+  <j:out value=" {"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Parse and generate fields -->
+  <j:set var="fields" value="${fieldDefs.split(',\\s*')}"/>
+  
+  <j:out value="    // Fields"/>
+  <j:out value="${'\n'}"/>
+  <j:forEach var="fieldDef" items="${fields}">
+    <j:set var="parts" value="${fieldDef.split(':\\s*')}"/>
+    <j:set var="fieldName" value="${parts[0]}"/>
+    <j:set var="fieldType" value="${parts[1]}"/>
+    <j:set var="annotations" value="${parts[2]}"/>
+    
+    <!-- Add annotations if present -->
+    <j:if test="${annotations != null and annotations != '' and annotations != 'null'}">
+      <j:set var="annots" value="${annotations.split('\\s+')}"/>
+      <j:forEach var="annot" items="${annots}">
+        <j:out value="    ${annot}"/>
+        <j:out value="${'\n'}"/>
+      </j:forEach>
+    </j:if>
+    
+    <!-- Field declaration -->
+    <j:out value="    private ${fieldType} ${fieldName};"/>
+    <j:out value="${'\n\n'}"/>
+  </j:forEach>
+  
+  <!-- Default constructor -->
+  <j:out value="    // Constructors"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="    public ${className}() {"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="    }"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Parameterized constructor -->
+  <j:out value="    public ${className}("/>
+  <j:forEach var="fieldDef" items="${fields}" indexVar="idx">
+    <j:set var="parts" value="${fieldDef.split(':\\s*')}"/>
+    <j:set var="fieldName" value="${parts[0]}"/>
+    <j:set var="fieldType" value="${parts[1]}"/>
+    
+    <j:if test="${idx gt 0}">
+      <j:out value=", "/>
+    </j:if>
+    <j:out value="${fieldType} ${fieldName}"/>
+  </j:forEach>
+  <j:out value=") {"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:forEach var="fieldDef" items="${fields}">
+    <j:set var="parts" value="${fieldDef.split(':\\s*')}"/>
+    <j:set var="fieldName" value="${parts[0]}"/>
+    <j:out value="        this.${fieldName} = ${fieldName};"/>
+    <j:out value="${'\n'}"/>
+  </j:forEach>
+  <j:out value="    }"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Generate getters and setters -->
+  <j:out value="    // Getters and Setters"/>
+  <j:out value="${'\n'}"/>
+  <j:forEach var="fieldDef" items="${fields}">
+    <j:set var="parts" value="${fieldDef.split(':\\s*')}"/>
+    <j:set var="fieldName" value="${parts[0]}"/>
+    <j:set var="fieldType" value="${parts[1]}"/>
+    <j:set var="methodName" value="${fieldName.substring(0,1).toUpperCase() + fieldName.substring(1)}"/>
+    
+    <!-- Getter -->
+    <j:out value="    public ${fieldType} get${methodName}() {"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="        return ${fieldName};"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="    }"/>
+    <j:out value="${'\n\n'}"/>
+    
+    <!-- Setter -->
+    <j:out value="    public void set${methodName}(${fieldType} ${fieldName}) {"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="        this.${fieldName} = ${fieldName};"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="    }"/>
+    <j:out value="${'\n\n'}"/>
+  </j:forEach>
+  
+  <!-- equals() method -->
+  <j:out value="    // equals and hashCode"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="    @Override"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="    public boolean equals(Object o) {"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="        if (this == o) return true;"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="        if (o == null || getClass() != o.getClass()) return false;"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="        ${className} that = (${className}) o;"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="        return Objects.equals(id, that.id);"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="    }"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- hashCode() method -->
+  <j:out value="    @Override"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="    public int hashCode() {"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="        return Objects.hash(id);"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="    }"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- toString() method -->
+  <j:out value="    @Override"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="    public String toString() {"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="        return &quot;${className}{&quot; +"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:forEach var="fieldDef" items="${fields}" indexVar="idx">
+    <j:set var="parts" value="${fieldDef.split(':\\s*')}"/>
+    <j:set var="fieldName" value="${parts[0]}"/>
+    
+    <j:out value="                &quot;"/>
+    <j:if test="${idx gt 0}">
+      <j:out value=", "/>
+    </j:if>
+    <j:out value="${fieldName}='&quot; + ${fieldName} +"/>
+    <j:out value="${'\n'}"/>
+  </j:forEach>
+  
+  <j:out value="                &quot;'}&quot;;"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="    }"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Close class -->
+  <j:out value="}"/>
+  <j:out value="${'\n'}"/>
+  
+</j:jelly>
