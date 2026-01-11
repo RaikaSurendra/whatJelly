@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!-- 
+  Practical Example: HTML Report Generator
+  Demonstrates: Generating HTML reports with data
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <!-- Sample data -->
+  <j:set var="reportTitle" value="Monthly Sales Report"/>
+  <j:set var="reportDate" value="${new java.util.Date()}"/>
+  <j:set var="salesData" value="${[
+    {'region': 'North', 'sales': 125000, 'target': 120000, 'growth': 8.5},
+    {'region': 'South', 'sales': 98000, 'target': 100000, 'growth': -2.0},
+    {'region': 'East', 'sales': 142000, 'target': 135000, 'growth': 5.2},
+    {'region': 'West', 'sales': 167000, 'target': 150000, 'growth': 11.3}
+  ]}"/>
+  
+  <j:set var="totalSales" value="0"/>
+  <j:forEach var="item" items="${salesData}">
+    <j:set var="totalSales" value="${totalSales + item.sales}"/>
+  </j:forEach>
+  
+  <!-- Generate HTML -->
+  <html>
+    <head>
+      <title>${reportTitle}</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .positive { color: green; font-weight: bold; }
+        .negative { color: red; font-weight: bold; }
+        .summary { margin-top: 20px; padding: 15px; background-color: #e7f3fe; border-left: 6px solid #2196F3; }
+      </style>
+    </head>
+    <body>
+      <h1>${reportTitle}</h1>
+      <p><strong>Generated:</strong> ${reportDate}</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Region</th>
+            <th>Sales ($)</th>
+            <th>Target ($)</th>
+            <th>Growth (%)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <j:forEach var="row" items="${salesData}">
+            <tr>
+              <td>${row.region}</td>
+              <td>${String.format('%,d', row.sales)}</td>
+              <td>${String.format('%,d', row.target)}</td>
+              <td>
+                <j:choose>
+                  <j:when test="${row.growth >= 0}">
+                    <span class="positive">+${row.growth}%</span>
+                  </j:when>
+                  <j:otherwise>
+                    <span class="negative">${row.growth}%</span>
+                  </j:otherwise>
+                </j:choose>
+              </td>
+              <td>
+                <j:choose>
+                  <j:when test="${row.sales >= row.target}">
+                    ✓ Target Met
+                  </j:when>
+                  <j:otherwise>
+                    ✗ Below Target
+                  </j:otherwise>
+                </j:choose>
+              </td>
+            </tr>
+          </j:forEach>
+        </tbody>
+      </table>
+      
+      <div class="summary">
+        <h2>Summary</h2>
+        <p><strong>Total Sales:</strong> $${String.format('%,d', totalSales)}</p>
+        <p><strong>Number of Regions:</strong> ${salesData.size()}</p>
+        <p><strong>Average per Region:</strong> $${String.format('%,.2f', totalSales / salesData.size())}</p>
+      </div>
+    </body>
+  </html>
+  
+</j:jelly>

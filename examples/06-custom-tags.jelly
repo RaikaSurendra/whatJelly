@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- 
+  Example 6: Custom Tags
+  Demonstrates: Defining and using custom tags
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:define="jelly:define">
+  
+  <!-- Define a custom tag -->
+  <define:tag name="greet">
+    <j:out value="Hello, ${name}! Welcome to ${place}."/>
+    <j:out value="${'\n'}"/>
+  </define:tag>
+  
+  <!-- Use the custom tag -->
+  <j:set var="name" value="Alice"/>
+  <j:set var="place" value="Jelly World"/>
+  <greet/>
+  
+  <j:set var="name" value="Bob"/>
+  <j:set var="place" value="Apache Commons"/>
+  <greet/>
+  
+  <!-- Define a tag with attributes -->
+  <define:tag name="formatNumber">
+    <j:set var="formatted" value="${String.format('%.2f', number)}"/>
+    <j:out value="Formatted: ${formatted}"/>
+  </define:tag>
+  
+  <j:out value="${'\n'}"/>
+  <j:set var="number" value="123.456789"/>
+  <formatNumber/>
+  
+</j:jelly>

@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!-- 
+  Practical Example: Environment-based Configuration Generator
+  Demonstrates: Dynamic configuration based on environment
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <!-- Get environment (default to dev) -->
+  <j:set var="env" value="${System.getProperty('env', 'dev')}"/>
+  
+  <!-- Configuration data -->
+  <j:set var="configs" value="${{
+    'dev': {
+      'dbHost': 'localhost',
+      'dbPort': 3306,
+      'dbName': 'myapp_dev',
+      'logLevel': 'DEBUG',
+      'cacheEnabled': false
+    },
+    'staging': {
+      'dbHost': 'staging-db.example.com',
+      'dbPort': 3306,
+      'dbName': 'myapp_staging',
+      'logLevel': 'INFO',
+      'cacheEnabled': true
+    },
+    'prod': {
+      'dbHost': 'prod-db.example.com',
+      'dbPort': 3306,
+      'dbName': 'myapp_prod',
+      'logLevel': 'WARN',
+      'cacheEnabled': true
+    }
+  }}"/>
+  
+  <j:set var="config" value="${configs[env]}"/>
+  
+  <!-- Generate application.properties -->
+  <j:out value="# Generated configuration for environment: ${env}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="# Generated at: ${new java.util.Date()}"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:out value="# Database Configuration"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="db.host=${config.dbHost}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="db.port=${config.dbPort}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="db.name=${config.dbName}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="db.url=jdbc:mysql://${config.dbHost}:${config.dbPort}/${config.dbName}"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:out value="# Logging"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="log.level=${config.logLevel}"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:out value="# Cache"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="cache.enabled=${config.cacheEnabled}"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:if test="${config.cacheEnabled}">
+    <j:out value="cache.ttl=3600"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="cache.maxSize=1000"/>
+    <j:out value="${'\n'}"/>
+  </j:if>
+  
+  <j:out value="${'\n'}"/>
+  <j:out value="# Environment-specific settings"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="app.environment=${env}"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:choose>
+    <j:when test="${env == 'prod'}">
+      <j:out value="app.debug=false"/>
+      <j:out value="${'\n'}"/>
+      <j:out value="app.ssl.enabled=true"/>
+    </j:when>
+    <j:otherwise>
+      <j:out value="app.debug=true"/>
+      <j:out value="${'\n'}"/>
+      <j:out value="app.ssl.enabled=false"/>
+    </j:otherwise>
+  </j:choose>
+  
+</j:jelly>

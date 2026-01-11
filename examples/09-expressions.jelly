@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!-- 
+  Example 9: JEXL Expressions
+  Demonstrates: Various expression types and operations
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <j:out value="JEXL Expression Examples"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="========================="/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- String operations -->
+  <j:set var="text" value="Apache Jelly"/>
+  <j:out value="Original: ${text}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Uppercase: ${text.toUpperCase()}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Lowercase: ${text.toLowerCase()}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Length: ${text.length()}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Substring: ${text.substring(0, 6)}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Math operations -->
+  <j:out value="${'\n'}"/>
+  <j:set var="x" value="7"/>
+  <j:set var="y" value="3"/>
+  <j:out value="Math Operations:"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${x} + ${y} = ${x + y}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${x} - ${y} = ${x - y}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${x} * ${y} = ${x * y}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${x} / ${y} = ${x / y}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${x} % ${y} = ${x % y}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Comparison operations -->
+  <j:out value="${'\n'}"/>
+  <j:out value="Comparisons:"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${x} > ${y} = ${x > y}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${x} == ${y} = ${x == y}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${x} != ${y} = ${x != y}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Logical operations -->
+  <j:out value="${'\n'}"/>
+  <j:set var="a" value="${true}"/>
+  <j:set var="b" value="${false}"/>
+  <j:out value="Logical Operations:"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${a} and ${b} = ${a and b}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${a} or ${b} = ${a or b}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="not ${a} = ${not a}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Conditional logic (JEXL 1.1 doesn't support ternary operator) -->
+  <j:out value="${'\n'}"/>
+  <j:set var="age" value="25"/>
+  <j:out value="Age: ${age}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Status: "/>
+  <j:if test="${age >= 18}">
+    <j:out value="Adult"/>
+  </j:if>
+  <j:if test="${age lt 18}">
+    <j:out value="Minor"/>
+  </j:if>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Null handling -->
+  <j:out value="${'\n'}"/>
+  <j:set var="nullVar" value="${null}"/>
+  <j:out value="Null check: ${nullVar == null}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Default value: "/>
+  <j:if test="${nullVar != null}">
+    <j:out value="${nullVar}"/>
+  </j:if>
+  <j:if test="${nullVar == null}">
+    <j:out value="default"/>
+  </j:if>
+  
+</j:jelly>

@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!-- 
+  Example 10: Java Integration
+  Demonstrates: Calling Java static methods and string manipulation
+  Note: JEXL 1.1 has limited features - no 'new' keyword or array literals
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <j:out value="Java Integration Examples"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="========================="/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Math operations with static methods -->
+  <j:out value="${'\n'}"/>
+  <j:out value="Math Constants and Operations:"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="PI: ${Math.PI}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="E: ${Math.E}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="sqrt(16): ${Math.sqrt(16)}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="pow(2, 10): ${Math.pow(2, 10)}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="max(10, 20): ${Math.max(10, 20)}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="min(10, 20): ${Math.min(10, 20)}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="abs(-42): ${Math.abs(-42)}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="ceil(3.14): ${Math.ceil(3.14)}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="floor(3.14): ${Math.floor(3.14)}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="round(3.6): ${Math.round(3.6)}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- System properties and methods -->
+  <j:out value="${'\n'}"/>
+  <j:out value="System Properties:"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Java version: ${System.getProperty('java.version')}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="OS: ${System.getProperty('os.name')}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="User: ${System.getProperty('user.name')}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Java home: ${System.getProperty('java.home')}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Current time (ms): ${System.currentTimeMillis()}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- String operations -->
+  <j:out value="${'\n'}"/>
+  <j:out value="String Operations:"/>
+  <j:out value="${'\n'}"/>
+  <j:set var="text" value="Apache Jelly"/>
+  <j:out value="Original: ${text}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Uppercase: ${text.toUpperCase()}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Lowercase: ${text.toLowerCase()}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Length: ${text.length()}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Replace: ${text.replace('Jelly', 'Commons')}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Substring(0,6): ${text.substring(0, 6)}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Contains 'Jelly': ${text.indexOf('Jelly') >= 0}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Numeric operations -->
+  <j:out value="${'\n'}"/>
+  <j:out value="Numeric Operations:"/>
+  <j:out value="${'\n'}"/>
+  <j:set var="num1" value="100"/>
+  <j:set var="num2" value="25"/>
+  <j:out value="${num1} + ${num2} = ${num1 + num2}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${num1} - ${num2} = ${num1 - num2}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${num1} * ${num2} = ${num1 * num2}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${num1} / ${num2} = ${num1 / num2}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="${num1} % ${num2} = ${num1 % num2}"/>
+  
+</j:jelly>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!-- 
+  Example 4: Loops
+  Demonstrates: forEach, while tags for iteration
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <!-- Create a list -->
+  <j:set var="fruits" value="${['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']}"/>
+  
+  <j:out value="Fruit List:"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- forEach loop -->
+  <j:forEach var="fruit" items="${fruits}" indexVar="index">
+    <j:out value="${index + 1}. ${fruit}"/>
+    <j:out value="${'\n'}"/>
+  </j:forEach>
+  
+  <j:out value="${'\n'}"/>
+  
+  <!-- Numeric range iteration -->
+  <j:out value="Numbers 1-5:"/>
+  <j:out value="${'\n'}"/>
+  <j:forEach var="i" begin="1" end="5">
+    <j:out value="Number ${i}"/>
+    <j:out value="${'\n'}"/>
+  </j:forEach>
+  
+  <j:out value="${'\n'}"/>
+  
+  <!-- While loop -->
+  <j:set var="counter" value="0"/>
+  <j:out value="Counting with while loop:"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:while test="${counter < 3}">
+    <j:out value="Counter: ${counter}"/>
+    <j:out value="${'\n'}"/>
+    <j:set var="counter" value="${counter + 1}"/>
+  </j:while>
+  
+  <j:out value="${'\n'}"/>
+  
+  <!-- Nested loops -->
+  <j:out value="Multiplication table (3x3):"/>
+  <j:out value="${'\n'}"/>
+  <j:forEach var="i" begin="1" end="3">
+    <j:forEach var="j" begin="1" end="3">
+      <j:out value="${i} x ${j} = ${i * j}  "/>
+    </j:forEach>
+    <j:out value="${'\n'}"/>
+  </j:forEach>
+  
+</j:jelly>

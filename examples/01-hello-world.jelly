@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- 
+  Example 1: Hello World
+  Demonstrates: Basic Jelly script structure and output
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <!-- Simple text output -->
+  <j:out value="Hello from Apache Jelly!"/>
+  
+  <!-- Newline -->
+  <j:out value="${'\n'}"/>
+  
+  <!-- Using system property -->
+  <j:out value="Java Version: ${System.getProperty('java.version')}"/>
+  
+</j:jelly>

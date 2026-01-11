@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!-- 
+  Practical Example: SQL DDL Generator
+  Demonstrates: Database schema generation
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <!-- Define table metadata -->
+  <j:set var="tableName" value="users"/>
+  <j:set var="columns" value="${[
+    {'name': 'id', 'type': 'BIGINT', 'constraints': 'PRIMARY KEY AUTO_INCREMENT'},
+    {'name': 'username', 'type': 'VARCHAR(50)', 'constraints': 'NOT NULL UNIQUE'},
+    {'name': 'email', 'type': 'VARCHAR(100)', 'constraints': 'NOT NULL UNIQUE'},
+    {'name': 'password_hash', 'type': 'VARCHAR(255)', 'constraints': 'NOT NULL'},
+    {'name': 'created_at', 'type': 'TIMESTAMP', 'constraints': 'DEFAULT CURRENT_TIMESTAMP'},
+    {'name': 'updated_at', 'type': 'TIMESTAMP', 'constraints': 'DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'}
+  ]}"/>
+  
+  <!-- Generate CREATE TABLE -->
+  <j:out value="-- Generated DDL for table: ${tableName}"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:out value="CREATE TABLE ${tableName} ("/>
+  <j:out value="${'\n'}"/>
+  
+  <j:forEach var="column" items="${columns}" indexVar="idx">
+    <j:out value="    ${column.name} ${column.type}"/>
+    <j:if test="${column.constraints != null}">
+      <j:out value=" ${column.constraints}"/>
+    </j:if>
+    <j:if test="${idx < columns.size() - 1}">
+      <j:out value=","/>
+    </j:if>
+    <j:out value="${'\n'}"/>
+  </j:forEach>
+  
+  <j:out value=");"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Generate INSERT statements -->
+  <j:set var="sampleData" value="${[
+    {'username': 'alice', 'email': 'alice@example.com', 'password_hash': 'hash1'},
+    {'username': 'bob', 'email': 'bob@example.com', 'password_hash': 'hash2'}
+  ]}"/>
+  
+  <j:out value="-- Sample INSERT statements"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:forEach var="row" items="${sampleData}">
+    <j:out value="INSERT INTO ${tableName} (username, email, password_hash)"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="VALUES ('${row.username}', '${row.email}', '${row.password_hash}');"/>
+    <j:out value="${'\n\n'}"/>
+  </j:forEach>
+  
+  <!-- Generate SELECT queries -->
+  <j:out value="-- Common queries"/>
+  <j:out value="${'\n\n'}"/>
+  <j:out value="-- Select all users"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="SELECT * FROM ${tableName};"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:out value="-- Select by username"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="SELECT * FROM ${tableName} WHERE username = ?;"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:out value="-- Count users"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="SELECT COUNT(*) as user_count FROM ${tableName};"/>
+  
+</j:jelly>

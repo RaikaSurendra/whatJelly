@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!-- 
+  Practical Example: Java POJO Generator
+  Demonstrates: Real-world code generation use case
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <!-- Define the class metadata -->
+  <j:set var="className" value="User"/>
+  <j:set var="packageName" value="com.example.model"/>
+  
+  <!-- Define fields -->
+  <j:set var="fields" value="${[
+    {'name': 'id', 'type': 'Long'},
+    {'name': 'username', 'type': 'String'},
+    {'name': 'email', 'type': 'String'},
+    {'name': 'createdAt', 'type': 'Date'}
+  ]}"/>
+  
+  <!-- Generate Java class -->
+  <j:out value="package ${packageName};"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:out value="import java.util.Date;"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <j:out value="public class ${className} {"/>
+  <j:out value="${'\n\n'}"/>
+  
+  <!-- Generate fields -->
+  <j:forEach var="field" items="${fields}">
+    <j:out value="    private ${field.type} ${field.name};"/>
+    <j:out value="${'\n'}"/>
+  </j:forEach>
+  
+  <j:out value="${'\n'}"/>
+  
+  <!-- Generate getters -->
+  <j:forEach var="field" items="${fields}">
+    <j:set var="methodName" value="${field.name.substring(0,1).toUpperCase() + field.name.substring(1)}"/>
+    <j:out value="    public ${field.type} get${methodName}() {"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="        return ${field.name};"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="    }"/>
+    <j:out value="${'\n\n'}"/>
+  </j:forEach>
+  
+  <!-- Generate setters -->
+  <j:forEach var="field" items="${fields}">
+    <j:set var="methodName" value="${field.name.substring(0,1).toUpperCase() + field.name.substring(1)}"/>
+    <j:out value="    public void set${methodName}(${field.type} ${field.name}) {"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="        this.${field.name} = ${field.name};"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="    }"/>
+    <j:out value="${'\n\n'}"/>
+  </j:forEach>
+  
+  <j:out value="}"/>
+  
+</j:jelly>

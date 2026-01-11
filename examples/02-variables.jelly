@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!-- 
+  Example 2: Variables
+  Demonstrates: Setting and using variables, expressions
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <!-- Set variables -->
+  <j:set var="name" value="Apache Jelly"/>
+  <j:set var="version" value="1.0"/>
+  <j:set var="year" value="2024"/>
+  
+  <!-- Use variables in expressions -->
+  <j:out value="Project: ${name}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Version: ${version}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Year: ${year}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Arithmetic expressions -->
+  <j:set var="a" value="10"/>
+  <j:set var="b" value="5"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="a = ${a}, b = ${b}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="a + b = ${a + b}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="a * b = ${a * b}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- String concatenation -->
+  <j:set var="greeting" value="${'Hello, ' + name + '!'}"/>
+  <j:out value="${greeting}"/>
+  
+</j:jelly>

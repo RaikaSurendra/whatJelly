@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!-- 
+  Example 3: Conditionals
+  Demonstrates: if, choose, when, otherwise tags
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <j:set var="score" value="85"/>
+  
+  <!-- Simple if -->
+  <j:out value="Score: ${score}"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:if test="${score >= 90}">
+    <j:out value="Grade: A - Excellent!"/>
+    <j:out value="${'\n'}"/>
+  </j:if>
+  
+  <j:if test="${score >= 80 and score < 90}">
+    <j:out value="Grade: B - Good job!"/>
+    <j:out value="${'\n'}"/>
+  </j:if>
+  
+  <!-- Choose/When/Otherwise (like switch-case) -->
+  <j:out value="${'\n'}"/>
+  <j:out value="Using choose/when:"/>
+  <j:out value="${'\n'}"/>
+  
+  <j:choose>
+    <j:when test="${score >= 90}">
+      <j:out value="Grade: A"/>
+    </j:when>
+    <j:when test="${score >= 80}">
+      <j:out value="Grade: B"/>
+    </j:when>
+    <j:when test="${score >= 70}">
+      <j:out value="Grade: C"/>
+    </j:when>
+    <j:when test="${score >= 60}">
+      <j:out value="Grade: D"/>
+    </j:when>
+    <j:otherwise>
+      <j:out value="Grade: F"/>
+    </j:otherwise>
+  </j:choose>
+  
+  <j:out value="${'\n'}"/>
+  
+  <!-- Boolean variables -->
+  <j:set var="isActive" value="${true}"/>
+  <j:if test="${isActive}">
+    <j:out value="Status: Active"/>
+  </j:if>
+  
+</j:jelly>

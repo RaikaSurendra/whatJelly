@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!-- 
+  Example 8: Script Invocation
+  Demonstrates: Calling other Jelly scripts and using scope
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <j:out value="Main Script Starting"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="=================="/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Set variable in current scope -->
+  <j:set var="mainVariable" value="I'm from the main script"/>
+  <j:set var="counter" value="1"/>
+  
+  <!-- Variables can be accessed by other tags -->
+  <j:out value="Main variable: ${mainVariable}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Counter: ${counter}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Create a new scope -->
+  <j:scope>
+    <j:set var="scopedVariable" value="I'm scoped"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="Inside scope: ${scopedVariable}"/>
+    <j:out value="${'\n'}"/>
+    <j:out value="Main variable accessible: ${mainVariable}"/>
+    <j:out value="${'\n'}"/>
+  </j:scope>
+  
+  <j:out value="${'\n'}"/>
+  <j:out value="=================="/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Main Script Completed"/>
+  
+</j:jelly>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- 
+  Example 7: File Operations
+  Demonstrates: Working with files and system properties
+-->
+<j:jelly xmlns:j="jelly:core">
+  
+  <!-- System properties -->
+  <j:out value="System Information:"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Java Version: ${System.getProperty('java.version')}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="OS Name: ${System.getProperty('os.name')}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="User Home: ${System.getProperty('user.home')}"/>
+  <j:out value="${'\n'}"/>
+  <j:out value="Current Dir: ${System.getProperty('user.dir')}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Environment variables -->
+  <j:out value="${'\n'}"/>
+  <j:out value="PATH variable exists: ${System.getenv('PATH') != null}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- File operations -->
+  <j:set var="tempDir" value="${System.getProperty('java.io.tmpdir')}"/>
+  <j:out value="Temp directory: ${tempDir}"/>
+  <j:out value="${'\n'}"/>
+  
+  <!-- Current time in milliseconds -->
+  <j:out value="${'\n'}"/>
+  <j:set var="currentTime" value="${System.currentTimeMillis()}"/>
+  <j:out value="Current time (ms): ${currentTime}"/>
+  
+</j:jelly>
