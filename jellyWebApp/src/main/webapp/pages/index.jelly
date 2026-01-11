@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<j:jelly xmlns:j="jelly:core" xmlns:app="app">
+<html>
+<head>
+    <title>Jelly Web App - Home</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+        .header { background: #2c3e50; color: white; padding: 20px; text-align: center; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
+        .card { background: white; border-radius: 8px; padding: 20px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+        .stat { text-align: center; padding: 20px; background: #3498db; color: white; border-radius: 8px; flex: 1; margin: 0 10px; }
+        .stat h2 { margin: 0; font-size: 48px; }
+        .stat p { margin: 10px 0 0 0; }
+        .menu { background: #34495e; padding: 15px; text-align: center; }
+        .menu a { color: white; text-decoration: none; padding: 10px 20px; margin: 0 10px; display: inline-block; }
+        .menu a:hover { background: #2c3e50; border-radius: 4px; }
+        h1, h2 { color: #2c3e50; }
+        .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .product { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .product h3 { margin: 0 0 10px 0; color: #2c3e50; }
+        .product .price { font-size: 24px; font-weight: bold; color: #27ae60; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🎯 Jelly Web Application</h1>
+        <p>Demonstrating Apache Jelly with Custom SQL Tags</p>
+    </div>
+
+    <div class="menu">
+        <a href="/">Home</a>
+        <a href="/users.jelly">Users</a>
+        <a href="/products.jelly">Products</a>
+        <a href="/dashboard.jelly">Dashboard</a>
+        <a href="/admin.jelly">Admin</a>
+    </div>
+
+    <div class="container">
+        <!-- Statistics using custom SQL tags -->
+        <app:sqlQuery var="userCount">
+            SELECT COUNT(*) as count FROM users WHERE active = TRUE
+        </app:sqlQuery>
+
+        <app:sqlQuery var="productCount">
+            SELECT COUNT(*) as count FROM products WHERE active = TRUE
+        </app:sqlQuery>
+
+        <app:sqlQuery var="orderCount">
+            SELECT COUNT(*) as count FROM orders
+        </app:sqlQuery>
+
+        <div class="stats">
+            <div class="stat">
+                <h2>${userCount[0].count}</h2>
+                <p>Active Users</p>
+            </div>
+            <div class="stat">
+                <h2>${productCount[0].count}</h2>
+                <p>Products</p>
+            </div>
+            <div class="stat">
+                <h2>${orderCount[0].count}</h2>
+                <p>Orders</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Welcome to Jelly Web App!</h2>
+            <p>This is a demonstration of using Apache Jelly for server-side templating with custom tags.</p>
+            <p><strong>Features:</strong></p>
+            <ul>
+                <li>Custom SQL tags for database operations</li>
+                <li>Dynamic page generation</li>
+                <li>Customizable templates</li>
+                <li>H2 in-memory database</li>
+                <li>Jetty embedded server</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Featured Products</h2>
+            
+            <app:sqlQuery var="products">
+                SELECT * FROM products WHERE active = TRUE ORDER BY created_at DESC LIMIT 6
+            </app:sqlQuery>
+
+            <div class="products">
+                <j:forEach var="product" items="${products}">
+                    <div class="product">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="price">
+                            $<app:formatNumber value="${product.price}" pattern="#,##0.00"/>
+                        </div>
+                        <p style="color: #7f8c8d; font-size: 14px;">
+                            Stock: ${product.stock} units
+                        </p>
+                    </div>
+                </j:forEach>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>How This Works</h2>
+            <p>This page is generated using Jelly templates with custom SQL tags:</p>
+            <pre style="background: #ecf0f1; padding: 15px; border-radius: 4px; overflow-x: auto;">
+&lt;app:sqlQuery var="products"&gt;
+    SELECT * FROM products WHERE active = TRUE
+&lt;/app:sqlQuery&gt;
+
+&lt;j:forEach var="product" items="${products}"&gt;
+    &lt;p&gt;${product.name} - $${product.price}&lt;/p&gt;
+&lt;/j:forEach&gt;</pre>
+        </div>
+
+        <div class="card">
+            <h2>Explore More</h2>
+            <ul>
+                <li><a href="/users.jelly">View Users</a> - See all registered users</li>
+                <li><a href="/products.jelly">Browse Products</a> - Complete product catalog</li>
+                <li><a href="/dashboard.jelly">Dashboard</a> - Analytics and statistics</li>
+                <li><a href="/admin.jelly">Admin Panel</a> - Database management</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
+</j:jelly>

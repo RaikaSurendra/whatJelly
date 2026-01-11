@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>D3 Test</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        #viz { border: 2px solid #ccc; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>D3 Lifecycle Test</h1>
+    <div id="viz"></div>
+    
+    <script>
+        const width = 1200;
+        const height = 400;
+        
+        const svg = d3.select("#viz")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        
+        const nodes = [
+            { id: 1, x: 100, y: 200, label: "Browser", color: "#3498db" },
+            { id: 2, x: 300, y: 200, label: "Server", color: "#e74c3c" },
+            { id: 3, x: 500, y: 200, label: "Servlet", color: "#f39c12" },
+            { id: 4, x: 700, y: 200, label: "Jelly", color: "#9b59b6" },
+            { id: 5, x: 900, y: 200, label: "Database", color: "#27ae60" },
+            { id: 6, x: 1100, y: 200, label: "Response", color: "#3498db" }
+        ];
+        
+        const links = [
+            { x1: 100, y1: 200, x2: 300, y2: 200 },
+            { x1: 300, y1: 200, x2: 500, y2: 200 },
+            { x1: 500, y1: 200, x2: 700, y2: 200 },
+            { x1: 700, y1: 200, x2: 900, y2: 200 },
+            { x1: 900, y1: 200, x2: 1100, y2: 200 }
+        ];
+        
+        // Draw links
+        svg.selectAll("line")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("x1", d => d.x1)
+            .attr("y1", d => d.y1)
+            .attr("x2", d => d.x2)
+            .attr("y2", d => d.y2)
+            .attr("stroke", "#999")
+            .attr("stroke-width", 2)
+            .attr("stroke-dasharray", "5,5");
+        
+        // Draw nodes
+        const nodeGroups = svg.selectAll("g")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("transform", d => `translate(${d.x}, ${d.y})`);
+        
+        nodeGroups.append("circle")
+            .attr("r", 40)
+            .attr("fill", d => d.color)
+            .attr("stroke", "white")
+            .attr("stroke-width", 3);
+        
+        nodeGroups.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dy", 5)
+            .attr("fill", "white")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold")
+            .text(d => d.label);
+        
+        console.log("D3 test rendered successfully");
+    </script>
+</body>
+</html>
